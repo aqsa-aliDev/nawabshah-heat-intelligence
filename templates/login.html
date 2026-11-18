@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in | Nawabshah Heat Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<div class="login">
+<div class="lhero" style="background-image:linear-gradient(180deg,rgba(20,16,14,.1),rgba(20,16,14,.9)),url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=68.3597,26.2183,68.4597,26.2783&bboxSR=4326&imageSR=3857&size=1500,1000&format=jpg&f=image')">
+<div><span class="eyebrow">Earth observation, machine learning, climate resilience</span>
+<h1>Nawabshah<br>Heat Intelligence</h1>
+<p>Find the neighbourhoods that heat up first. Powered by NASA data, built to protect the people who need it most.</p></div></div>
+<div class="lform"><h2 style="font-size:2rem">Welcome</h2><p class="note">Sign in to open the heat-risk dashboard.</p>
+<div class="tabs"><button id="tin" class="{{ 'on' if tab=='in' }}">Sign in</button><button id="tup" class="{{ 'on' if tab=='up' }}">Create account</button></div>
+{% if err %}<div class="err">{{ err }}</div>{% endif %}
+<form id="fin" method="post" class="{{ 'hide' if tab=='up' }}"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="action" value="signin">
+<label>Email</label><input type="email" name="email" required><label>Password</label><input type="password" name="password" required>
+<p><button class="btn primary">Sign in</button></p></form>
+<form id="fup" method="post" class="{{ 'hide' if tab!='up' }}"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="action" value="signup">
+<label>Full name</label><input type="text" name="name" required><label>Email address</label><input type="email" name="email" required>
+<label>Password (8+ characters)</label><input type="password" name="password" required minlength="8"><label>Confirm password</label><input type="password" name="password2" required>
+<p><button class="btn primary">Create account</button></p></form>
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="action" value="guest"><button class="btn">Continue as guest</button></form>
+<p class="note">Passwords are stored as salted hashes, never as plain text.</p></div></div>
+<script>const a=document.getElementById('tin'),b=document.getElementById('tup'),f=document.getElementById('fin'),g=document.getElementById('fup');
+function show(up){f.classList.toggle('hide',up);g.classList.toggle('hide',!up);a.classList.toggle('on',!up);b.classList.toggle('on',up)}
+a.onclick=()=>show(false);b.onclick=()=>show(true)</script></body></html>

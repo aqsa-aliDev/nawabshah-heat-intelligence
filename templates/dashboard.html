@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nawabshah Heat Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<div class="app"><aside>
+<p class="note">Signed in as <b style="color:var(--txt)">{{ user }}</b></p><a href="/logout"><button class="btn">Sign out</button></a>
+<h3>Scenario</h3><p class="note">Starts from a model trained on NASA POWER data. Adjust to test what-ifs.</p>
+<button class="btn primary" id="nasa">Predict from NASA data</button>
+<div class="presets"><button class="btn" data-p="35,45,3">Normal day</button><button class="btn" data-p="43,35,2">Heatwave</button><button class="btn" data-p="48,28,1.2">Record heat</button></div>
+<div class="sl"><div>Max air temperature <b id="vt"></b></div><input type="range" id="t" min="25" max="50" step="0.5"></div>
+<div class="sl"><div>Relative humidity <b id="vrh"></b></div><input type="range" id="rh" min="10" max="90" step="1"></div>
+<div class="sl"><div>Wind speed <b id="vws"></b></div><input type="range" id="ws" min="0.3" max="8" step="0.1"></div>
+<p class="note" id="src"></p></aside>
+<main>
+<section class="hero"><div><h1>Nawabshah<br>Heat Intelligence</h1><p>Satellite data and machine learning show which neighbourhoods of Nawabshah, Sindh, will be hottest, before the heatwave arrives.</p>
+<div class="heatbar" id="heatbar"></div><span class="note">Each block is one monitoring zone, hottest first.</span></div>
+<div class="big"><div class="note">Hottest zone feels like</div><div class="n" id="hn"></div><div class="note" id="hz"></div><span class="pill" id="hp"></span></div></section>
+<div class="kpis"><div class="kpi"><span>Zones monitored</span><b id="k1"></b></div><div class="kpi"><span>High or extreme zones</span><b id="k2"></b></div>
+<div class="kpi"><span>People in those zones</span><b id="k3"></b></div><div class="kpi"><span>Average urban heat uplift</span><b id="k4"></b></div></div>
+<div class="tabbar" id="tabs"><button data-t="sat" class="on">Satellite view</button><button data-t="fc">NASA forecast</button><button data-t="risk">Heat-risk map</button><button data-t="ins">Insights</button><button data-t="wi">What-if planner</button></div>
+<div class="pane on" id="p-sat"><div class="two"><div class="map" id="map1"></div><div class="card"><h3>Imagery</h3>
+<select id="base"><option value="esri">Esri high-resolution</option><option value="nasa">NASA VIIRS true colour</option></select>
+<label><input type="checkbox" id="ov" checked> Show risk zones</label><p class="note">Zoom in to see dense roofs and bare ground next to green canals and farmland. Click a zone for details.</p></div></div></div>
+<div class="pane" id="p-fc"><div class="kpis" style="grid-template-columns:repeat(3,1fr)" id="fck"></div><div class="card"><h3>Heat forecast learned from NASA POWER</h3><div class="chart" style="height:340px"><canvas id="cfc"></canvas></div><p class="note" id="fcn"></p></div></div>
+<div class="pane" id="p-risk"><div class="two"><div class="map" id="map2"></div><div class="card"><h3>Priority list</h3><table id="tbl"></table><p class="note">Priority = predicted felt temperature (80%) + share of children, elderly and outdoor workers (20%).</p></div></div></div>
+<div class="pane" id="p-ins"><div class="eq"><div class="card"><h3>What drives neighbourhood heat</h3><div class="chart"><canvas id="cimp"></canvas></div></div>
+<div class="card"><h3>Hottest, middle and coolest zone as air warms</h3><div class="chart"><canvas id="csw"></canvas></div></div></div><div class="info" id="gap"></div></div>
+<div class="pane" id="p-wi"><div class="card"><h3>Test a cooling plan before spending money</h3><div class="eq"><div><label>Zone</label><select id="wz"></select>
+<div class="sl"><div>Add tree and green cover (NDVI) <b id="vtr"></b></div><input type="range" id="tree" min="0" max="0.4" step="0.01" value="0.15"></div>
+<div class="sl"><div>Cool roofs and pavements (albedo) <b id="vrf"></b></div><input type="range" id="roof" min="0" max="0.15" step="0.01" value="0.08"></div></div>
+<div class="kpis" style="grid-template-columns:1fr;margin:0" id="wik"></div></div><p class="note" id="wip"></p></div></div>
+<p class="note" style="margin-top:2rem">Screening tool for planning. Air-temperature forecast: Random Forest trained on NASA POWER (about 50 km grid). Neighbourhood differences use illustrative land-cover values until real satellite rasters are added. Imagery: NASA GIBS, Esri.</p>
+</main></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script></body></html>
